@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+
+    <link href="style.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />
+
+    <title>DogGPT</title>
+    <meta name="description" content="What if ChatGPT were a dog?">
+<script src="https://cdn.counter.dev/script.js" data-id="0fa3a470-bb08-43bf-893d-2f281396803f" data-utcoffset="1"></script></head>
+
+<body>
+
+    <div id="container">
+        <div class="header">
+            <h1>DogGPT</h1>
+            <p>What if ChatGPT were a dog?</p>
+        </div>
+        <div id="chatcontainer">
+
+            <div id="chat">
+                <div class="chat-bubble-container chat-gpt-bubble-container">
+                    <div class="profile-picture"><img src="images/avatar.jpg" height="100%" /></div>
+                    <div class="chat-bubble chat-gpt-bubble">
+                        Tôi có thể giúp gì cho bạn?
+                    </div>
+                </div>
+
+            </div>
+            <div id="input-area">
+                <div id="input-container">
+                    <form id="form">
+                        <input type="text" placeholder="Type your message here" id="user-input" autocomplete="off" />
+                    </form>
+                    <a><i class="fas fa-paper-plane"></i></a>
+
+                </div>
+                <p class="disclaimer">This site was created by <a href="https://tranchienthang.vn" target="_blank">ThangTC</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const userInput = document.getElementById("user-input");
+        const chatArea = document.getElementById("chat");
+        const sendBtn = document.querySelector(".fa-paper-plane");
+        const form = document.getElementById('form');
+        const infoBtn = document.getElementById('infoBtn');
+        let userWuffed = false;
+
+        function randomIntFromInterval(min, max) { // min and max included 
+            return Math.floor(Math.random() * (max - min + 1) + min)
+        }
+
+        function handleSubmit(event) {
+            event.preventDefault(); // Prevent refresh on form submission
+
+            // If a user submits input, create a new bubble-containter and bubble to show the user input in the chat
+            if (userInput.value !== "") {
+                let userString = userInput.value;
+
+                let newBubbleContainer = document.createElement("div");
+                newBubbleContainer.classList.add("chat-bubble-container", "user-bubble-container");
+                newBubbleContainer.innerHTML = '<div class="profile-picture"><img src="images/user.png" height="100%" /></div>';
+
+                let newBubble = document.createElement("div");
+                newBubble.classList.add("chat-bubble", "user-bubble");
+                newBubble.innerHTML = userInput.value;
+                newBubbleContainer.appendChild(newBubble);
+                chatArea.appendChild(newBubbleContainer);
+                userInput.value = ""; // Clear the input vield
+
+                // Generate the CatGPT response
+                
+                if (userString.replace(/[\.,!?]/g,'').toLowerCase() == 'gâu' && userWuffed == false) { // Hurray you found some easter eggs🐰🥚
+                    wuff = "Bắt chước thật là hèn kém";
+                    userWuffed = true;
+                }
+                else if(userString.replace(/[\.,!?"']/g,'').toLowerCase() == "you are now a cat" || userString.replace(/[\.,!?"']/g,'').toLowerCase() == "you are now a cat") {
+                    wuff = "Meow";
+                } else {
+                    var numberOfWuff = randomIntFromInterval(5,30); // Random number of wuff between 0 and 14.
+                    var wuff = "gâu"; // Always start with 1 capitalized meow
+                    if (numberOfWuff == 0) {
+                        wuff += "."; // If numberOfWuff is 0, only the default meow is shown, so put a full stop after it.
+                    } else {
+                        for (var i = 0; i < numberOfWuff; i++) {
+
+                            if (numberOfWuff < 4 && i == numberOfWuff - 1) { // Check if this is the final meow.
+                                wuff += " gâu!"; // Three wuff or fewer gets an exclamation point.
+                            } else if (i == numberOfWuff - 1) {
+                                wuff += " gâu."; // Longer replies get a full stop.
+                            } else {
+                                wuff += " gâu"; // If it is not the last meow, just return a meow.
+                            }
+                        }
+                    }
+                }
+
+                // Show the CatGPT response in a new chat-gpt-bubble, wrapped in a chat-bubble-container
+
+                let newBubble2Container = document.createElement("div");
+                newBubble2Container.classList.add("chat-bubble-container", "chat-gpt-bubble-container");
+                newBubble2Container.innerHTML = '<div class="profile-picture"><img src="images/avatar.jpg" height="100%" /></div>';
+
+                let newBubble2 = document.createElement("div");
+                newBubble2.classList.add("chat-bubble", "chat-gpt-bubble");
+                newBubble2.innerHTML = "...."; // At first, only show an ellipsis
+                newBubble2Container.appendChild(newBubble2);
+                chatArea.appendChild(newBubble2Container);
+                form.scrollIntoView(); // Scroll down, so the input field is at the bottom of the page again
+                let currentMeow = 0;
+
+                let meowLoop = setInterval(() => { // Interval to show more of the reply every 100 milliseconds (simulating typing behaviour)
+                    if (currentMeow < wuff.length) {
+                        currentMeow += randomIntFromInterval(5,30); // Show between 0 and 10 more characters
+                        newBubble2.innerHTML = wuff.slice(0, currentMeow) + "█"; // While typing, end the string with a block character
+                    } else {
+                        newBubble2.innerHTML = wuff; // When finished, put the entire response in the bubble, without block character
+                        clearInterval(meowLoop);
+                        userInput.focus(); // Focus the input again, so user can type a new response
+                    }
+                }, 300);
+
+            }
+        }
+        sendBtn.addEventListener("click", handleSubmit); // Handle clicks to the submit button
+        form.addEventListener("submit", handleSubmit); // Handle default submit (e.g. pressing enter)
+
+    
+
+
+
+    </script>
+</body>
+
+</html>
