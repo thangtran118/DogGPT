@@ -15,7 +15,9 @@
 
     <title>DogGPT</title>
     <meta name="description" content="What if ChatGPT were a dog?">
-<script src="https://cdn.counter.dev/script.js" data-id="0fa3a470-bb08-43bf-893d-2f281396803f" data-utcoffset="1"></script></head>
+    <script src="https://cdn.counter.dev/script.js" data-id="0fa3a470-bb08-43bf-893d-2f281396803f"
+        data-utcoffset="1"></script>
+</head>
 
 <body>
 
@@ -43,7 +45,8 @@
                     <a><i class="fas fa-paper-plane"></i></a>
 
                 </div>
-                <p class="disclaimer">This site was created by <a href="https://tranchienthang.vn" target="_blank">ThangTC</a></p>
+                <p class="disclaimer">This site was created by <a href="https://tranchienthang.vn"
+                        target="_blank">ThangTC</a></p>
             </div>
         </div>
     </div>
@@ -54,10 +57,15 @@
         const sendBtn = document.querySelector(".fa-paper-plane");
         const form = document.getElementById('form');
         const infoBtn = document.getElementById('infoBtn');
-        let userWuffed = false;
 
-        function randomIntFromInterval(min, max) { // min and max included 
-            return Math.floor(Math.random() * (max - min + 1) + min)
+        function randomWithRatio() {
+            const randomNumber = Math.floor(Math.random() * 49) + 2; // Sinh số ngẫu nhiên trong khoảng từ 2 đến 50
+            if (randomNumber >= 5 && randomNumber <= 15) {
+                return randomNumber; // Trả về giá trị nếu nó trong khoảng từ 5 đến 15
+            } else {
+                const isReturnOther = Math.random() <= 0.2; // Xác định xem có trả về giá trị còn lại không
+                return isReturnOther ? randomNumber : randomWithRatio(); // Nếu có, trả về giá trị ngẫu nhiên khác trong khoảng từ 2 đến 50
+            }
         }
 
         function handleSubmit(event) {
@@ -79,21 +87,19 @@
                 userInput.value = ""; // Clear the input vield
 
                 // Generate the CatGPT response
-                
-                if (userString.replace(/[\.,!?]/g,'').toLowerCase() == 'gâu' && userWuffed == false) { // Hurray you found some easter eggs🐰🥚
-                    wuff = "Bắt chước thật là hèn kém";
-                    userWuffed = true;
+
+                if (/(g[âa]u)+/.test(userString.toLowerCase())) { // Hurray you found some easter eggs🐰🥚
+                    wuff = "Bắt chước thật là hèn kém.";
                 }
-                else if(userString.replace(/[\.,!?"']/g,'').toLowerCase() == "you are now a cat" || userString.replace(/[\.,!?"']/g,'').toLowerCase() == "you are now a cat") {
+                else if (userString.replace(/[\.,!?"']/g, '').toLowerCase() == "you are now a cat" || userString.replace(/[\.,!?"']/g, '').toLowerCase() == "you are now a cat") {
                     wuff = "Meow";
                 } else {
-                    var numberOfWuff = randomIntFromInterval(5,30); // Random number of wuff between 0 and 14.
+                    var numberOfWuff = randomWithRatio(); // Random number of wuff between 0 and 14.
                     var wuff = "gâu"; // Always start with 1 capitalized meow
                     if (numberOfWuff == 0) {
                         wuff += "."; // If numberOfWuff is 0, only the default meow is shown, so put a full stop after it.
                     } else {
                         for (var i = 0; i < numberOfWuff; i++) {
-
                             if (numberOfWuff < 4 && i == numberOfWuff - 1) { // Check if this is the final meow.
                                 wuff += " gâu!"; // Three wuff or fewer gets an exclamation point.
                             } else if (i == numberOfWuff - 1) {
@@ -119,26 +125,21 @@
                 form.scrollIntoView(); // Scroll down, so the input field is at the bottom of the page again
                 let currentMeow = 0;
 
-                let meowLoop = setInterval(() => { // Interval to show more of the reply every 100 milliseconds (simulating typing behaviour)
+                let meowLoop = setInterval(() => {
                     if (currentMeow < wuff.length) {
-                        currentMeow += randomIntFromInterval(5,30); // Show between 0 and 10 more characters
+                        currentMeow += randomWithRatio(); // Show between 0 and 10 more characters
                         newBubble2.innerHTML = wuff.slice(0, currentMeow) + "█"; // While typing, end the string with a block character
                     } else {
                         newBubble2.innerHTML = wuff; // When finished, put the entire response in the bubble, without block character
                         clearInterval(meowLoop);
                         userInput.focus(); // Focus the input again, so user can type a new response
                     }
-                }, 300);
+                }, 250);
 
             }
         }
         sendBtn.addEventListener("click", handleSubmit); // Handle clicks to the submit button
         form.addEventListener("submit", handleSubmit); // Handle default submit (e.g. pressing enter)
-
-    
-
-
-
     </script>
 </body>
 
